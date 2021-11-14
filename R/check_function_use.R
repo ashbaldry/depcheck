@@ -56,11 +56,13 @@ addRegexAssignmentCheck <- function(x) {
 }
 
 functionArgumentCheck <- function() {
+  # Checks that the function name is neither an argument in a function call, nor used as assignment
   "(?:(?![^\\(\\{]\\s*=[^\\(\\{]*(,|\\)))(?!\\s*<-))"
 }
 
 functionAssignmentCheck <- function(x) {
-  # Cannot use * in look-behind, so assuming noone will have more than 1 space
+  # Cannot use * in look-behind, so assuming no-one will have more than 1 space
+  # Checks that the function was not previously assigned as a variable
   paste0("(?:(?<!", x, "<-))(?:(?<!", x, "\\s<-))")
 }
 
