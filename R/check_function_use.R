@@ -25,16 +25,30 @@ checkFunctionUse <- function(function_name, code, package_name = NULL) {
 }
 
 createFunctionCheckRegEx <- function(function_name, package_name = NULL, internal = FALSE) {
-  function_word <- paste0("\\b", function_name, "\\b")
+  function_name_regex <- regexEscape(function_name)
+
+  function_word <- paste0("\\b", function_name_regex, "\\b", FUNCTION_ARGUMENT_CHECK)
 
   if (!is.null(package_name)) {
+    package_name_regex <- regexEscape(package_name)
+
     if (internal) {
       operator <- ":::"
     } else {
       operator <- "::"
     }
-    function_word <- paste0("[^:]", function_name, "|\\b", package_name, operator, function_name, "\\b")
+    function_word <- paste0(
+      "[^:]", function_word, "|",
+      "\\b", package_name_regex, operator, function_name_regex, "\\b"
+    )
   }
 
   function_word
 }
+
+regexEscape <- function(x) {
+  gsub(paste0("(", paste0("\\", REGEX_SPECIAL_CHARACTERS, collapse = "|"), ")"), "\\\\\\1", x)
+}
+
+REGEX_SPECIAL_CHARACTERS <- c("[", "]", "{", "}", "(", ")", "\\", "^", "$", ".", "|", "?", "*", "+")
+FUNCTION_ARGUMENT_CHECK <- "(?:(?![^\\(\\{] *=[^\\(\\{]*\\)))"
