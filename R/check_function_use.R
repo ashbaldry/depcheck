@@ -27,7 +27,8 @@ checkFunctionUse <- function(function_name, code, package_name = NULL) {
 createFunctionCheckRegEx <- function(function_name, package_name = NULL, internal = FALSE) {
   function_name_regex <- regexEscape(function_name)
 
-  function_word <- paste0("\\b", function_name_regex, "\\b", FUNCTION_ARGUMENT_CHECK)
+  function_word <- paste0("\\b", function_name_regex, "\\b")
+  function_word <- addRegexAssignmentCheck(function_word)
 
   if (!is.null(package_name)) {
     package_name_regex <- regexEscape(package_name)
@@ -50,5 +51,18 @@ regexEscape <- function(x) {
   gsub(paste0("(", paste0("\\", REGEX_SPECIAL_CHARACTERS, collapse = "|"), ")"), "\\\\\\1", x)
 }
 
+addRegexAssignmentCheck <- function(x) {
+  paste0(functionAssignmentCheck(x), x, functionArgumentCheck())
+}
+
+functionArgumentCheck <- function() {
+  "(?:(?![^\\(\\{]\\s*=[^\\(\\{]*(,|\\)))(?!\\s*<-))"
+}
+
+functionAssignmentCheck <- function(x) {
+  # Cannot use * in look-behind, so assuming noone will have more than 1 space
+  paste0("(?:(?<!", x, "<-))(?:(?<!", x, "\\s<-))")
+}
+
 REGEX_SPECIAL_CHARACTERS <- c("[", "]", "{", "}", "(", ")", "\\", "^", "$", ".", "|", "?", "*", "+")
-FUNCTION_ARGUMENT_CHECK <- "(?:(?![^\\(\\{] *=[^\\(\\{]*\\)))"
+
