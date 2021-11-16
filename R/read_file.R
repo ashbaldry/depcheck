@@ -60,7 +60,7 @@ readRFiles <- function(files, path = NULL) {
   }
 
   code <- lapply(files, formatR::tidy_source, comment = FALSE, blank = FALSE, output = FALSE)
-  code <- unlist(lapply(code, \(x) x$text.tidy), use.names = FALSE, recursive = FALSE)
+  code <- unlist(lapply(code, function(x) x$text.tidy), use.names = FALSE, recursive = FALSE)
 
   unique(code)
 }
