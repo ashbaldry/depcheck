@@ -22,6 +22,7 @@ testthat::test_that("createFunctionCheckRegEx returns regex expression with pack
   testthat::expect_output(print(package_regex), "package:::function")
 })
 
+# Basic Scenarios
 testthat::test_that("checkFunctionUse returns 0 when no code given", {
   testthat::expect_warning(
     checkFunctionUse("function", character(0)),
@@ -64,4 +65,59 @@ testthat::test_that("checkFunctionUse returns 2 when function used twice in 1 fu
 
   testthat::expect_type(function_use, "double")
   testthat::expect_identical(function_use, 2)
+})
+
+# More Secnarios
+testthat::test_that("checkFunctionUse returns 0 when function is another function argument", {
+  function_use <- checkFunctionUse(
+    "print",
+    "test <- function(x) {test(print = 'Test function')}",
+  )
+
+  testthat::expect_identical(function_use, 0)
+})
+
+testthat::test_that("checkFunctionUse returns 1 when function is called after being separately used as an argument", {
+  function_use <- checkFunctionUse(
+    "print",
+    "test <- function(x) {test(print = 'Test function'); print('Test output');}",
+  )
+
+  testthat::expect_identical(function_use, 1)
+})
+
+testthat::test_that("checkFunctionUse returns 1 when function is called before being separately used as an argument", {
+  function_use <- checkFunctionUse(
+    "print",
+    "test <- function(x) {print('Test output'); test(print = 'Test function');}",
+  )
+
+  testthat::expect_identical(function_use, 1)
+})
+
+testthat::test_that("checkFunctionUse returns 0 when function is assigned new value", {
+  function_use <- checkFunctionUse(
+    "print",
+    "print <- function(x) {print('Test function'); print('Test function 2')}",
+  )
+
+  testthat::expect_identical(function_use, 0)
+})
+
+testthat::test_that("checkFunctionUse returns 0 on function is part of a substring", {
+  function_use <- checkFunctionUse(
+    "print",
+    "test <- function(x) {cat('I will print the statement')}",
+  )
+
+  testthat::expect_identical(function_use, 0)
+})
+
+testthat::test_that("checkFunctionUse returns 1 on function is a string", {
+  function_use <- checkFunctionUse(
+    "print",
+    "test <- function(x) {getFromNamespace('print')}",
+  )
+
+  testthat::expect_identical(function_use, 1)
 })

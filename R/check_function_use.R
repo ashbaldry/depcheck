@@ -21,6 +21,7 @@ checkFunctionUse <- function(function_name, code, package_name = NULL) {
 
   code_split <- strsplit(code, function_regex, perl = TRUE)
   occurrences <- lengths(code_split) - 1
+
   sum(occurrences)
 }
 
@@ -52,19 +53,21 @@ regexEscape <- function(x) {
 }
 
 addRegexAssignmentCheck <- function(x) {
-  paste0(functionAssignmentCheck(x), x, functionArgumentCheck())
+  paste0(
+    addPreviousFunctionAssignmentRegex(x),
+    "(?:",
+    x,
+    FUNCTION_ARGUMENT_REGEX,
+    FUNCTION_ASSIGNMENT_REGEX,
+    ")"
+  )
 }
 
-functionArgumentCheck <- function() {
-  # Checks that the function name is neither an argument in a function call, nor used as assignment
-  "(?:(?![^\\(\\{]\\s*=[^\\(\\{]*(,|\\)))(?!\\s*<-))"
+addPreviousFunctionAssignmentRegex <- function(x) {
+  paste0("(", x, "\\s*<-.*(*SKIP)(*FAIL)|)")
 }
-
-functionAssignmentCheck <- function(x) {
-  # Cannot use * in look-behind, so assuming no-one will have more than 1 space
-  # Checks that the function was not previously assigned as a variable
-  paste0("(?:(?<!", x, "<-))(?:(?<!", x, "\\s<-))")
-}
+FUNCTION_ARGUMENT_REGEX <- "(?!\\s*=)"
+FUNCTION_ASSIGNMENT_REGEX <- "(?!\\s*<-)"
 
 REGEX_SPECIAL_CHARACTERS <- c("[", "]", "{", "}", "(", ")", "\\", "^", "$", ".", "|", "?", "*", "+")
 
