@@ -77,6 +77,15 @@ testthat::test_that("checkFunctionUse returns 0 when function is another functio
   testthat::expect_identical(function_use, 0)
 })
 
+testthat::test_that("checkFunctionUse returns 1 when function is the value of a function argument", {
+  function_use <- checkFunctionUse(
+    "print",
+    "test <- function(x) {test(type = print)}",
+  )
+
+  testthat::expect_identical(function_use, 1)
+})
+
 testthat::test_that("checkFunctionUse returns 1 when function is called after being separately used as an argument", {
   function_use <- checkFunctionUse(
     "print",
@@ -111,6 +120,15 @@ testthat::test_that("checkFunctionUse returns 0 on function is part of a substri
   )
 
   testthat::expect_identical(function_use, 0)
+})
+
+testthat::test_that("checkFunctionUse returns 1 on function called after being called in quotes", {
+  function_use <- checkFunctionUse(
+    "print",
+    "test <- function(x) {cat('I will print the statement'); print(\"It is now printed\")}",
+  )
+
+  testthat::expect_identical(function_use, 1)
 })
 
 testthat::test_that("checkFunctionUse returns 1 on function is a string", {

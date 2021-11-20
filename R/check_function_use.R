@@ -22,7 +22,9 @@ checkFunctionUse <- function(function_name, code, package_name = NULL) {
   code_split <- strsplit(code, function_regex, perl = TRUE)
   occurrences <- lengths(code_split) - 1
 
-  sum(occurrences)
+  quote_occurrences <- checkQuotedFunction(code, function_name)
+
+  sum(occurrences - quote_occurrences)
 }
 
 createFunctionCheckRegEx <- function(function_name, package_name = NULL, internal = FALSE) {
@@ -52,6 +54,8 @@ regexEscape <- function(x) {
   gsub(paste0("(", paste0("\\", REGEX_SPECIAL_CHARACTERS, collapse = "|"), ")"), "\\\\\\1", x)
 }
 
+REGEX_SPECIAL_CHARACTERS <- c("[", "]", "{", "}", "(", ")", "\\", "^", "$", ".", "|", "?", "*", "+")
+
 addRegexAssignmentCheck <- function(x) {
   paste0(
     addPreviousFunctionAssignmentRegex(x),
@@ -66,8 +70,24 @@ addRegexAssignmentCheck <- function(x) {
 addPreviousFunctionAssignmentRegex <- function(x) {
   paste0("(", x, "\\s*<-.*(*SKIP)(*FAIL)|)")
 }
+
 FUNCTION_ARGUMENT_REGEX <- "(?!\\s*=)"
 FUNCTION_ASSIGNMENT_REGEX <- "(?!\\s*<-)"
 
-REGEX_SPECIAL_CHARACTERS <- c("[", "]", "{", "}", "(", ")", "\\", "^", "$", ".", "|", "?", "*", "+")
+checkQuotedFunction <- function(code, function_name) {
+  quoted_substrings <- extractQuotedSubstrings(code)
+  function_name_regex <- paste0("\\b", regexEscape(function_name), "\\b")
 
+  function_mentions <- lapply(quoted_substrings, grep, pattern = function_name_regex, value = TRUE)
+  function_mentions <- lapply(quoted_substrings, gsub, pattern = "^(\"|')|(\"|')$", replacement = "")
+  function_mentions <- lapply(function_mentions, setdiff, y = function_name)
+  lengths(function_mentions)
+}
+
+extractQuotedSubstrings <- function(code) {
+  quote_matches <- gregexpr(QUOTED_SUBSTRING_REGEX, code, perl = TRUE)
+  quoted_substrings <- regmatches(code, quote_matches)
+  quoted_substrings <- lapply(quoted_substrings, gsub, pattern = "^\"|\"$", replacement = "")
+}
+
+QUOTED_SUBSTRING_REGEX <- "([\"'])(?:\\\\.|(?!\\1).)*+\\1"
