@@ -79,7 +79,6 @@ checkQuotedFunction <- function(code, function_name) {
   function_name_regex <- paste0("\\b", regexEscape(function_name), "\\b")
 
   function_mentions <- lapply(quoted_substrings, grep, pattern = function_name_regex, value = TRUE)
-  function_mentions <- lapply(quoted_substrings, gsub, pattern = "^(\"|')|(\"|')$", replacement = "")
   function_mentions <- lapply(function_mentions, setdiff, y = function_name)
   lengths(function_mentions)
 }
@@ -87,7 +86,7 @@ checkQuotedFunction <- function(code, function_name) {
 extractQuotedSubstrings <- function(code) {
   quote_matches <- gregexpr(QUOTED_SUBSTRING_REGEX, code, perl = TRUE)
   quoted_substrings <- regmatches(code, quote_matches)
-  quoted_substrings <- lapply(quoted_substrings, gsub, pattern = "^\"|\"$", replacement = "")
+  lapply(quoted_substrings, gsub, pattern = "^(\"|')|(\"|')$", replacement = "")
 }
 
 QUOTED_SUBSTRING_REGEX <- "([\"'])(?:\\\\.|(?!\\1).)*+\\1"
