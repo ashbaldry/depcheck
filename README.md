@@ -26,5 +26,5 @@ checkPackageDependencies()
 
 ```r
 library(depcheck)
-checkShinyAppDependencies()
+checkShinyDependencies()
 ```
