@@ -1,7 +1,7 @@
 testthat::test_that("getPackageFunctions fails for non-existent package", {
   testthat::expect_error(
     getPackageFunctions("nonexistent_package"),
-    "there is no package called"
+    "Unable to load"
   )
 })
 
@@ -15,7 +15,7 @@ testthat::test_that("getPackageFunctions returns character vector of functions i
 testthat::test_that("getInternalPackageFunctions fails for non-existent package", {
   testthat::expect_error(
     getInternalPackageFunctions("nonexistent_package"),
-    "there is no package called"
+    "Unable to load"
   )
 })
 

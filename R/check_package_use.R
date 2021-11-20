@@ -48,8 +48,17 @@ checkDependentPackageUsage <- function(package_name, code) {
 print.package_usage <- function(x, ..., warn_percent_usage = 0.2, warn_number_usage = 3,
                                 include_used_functions = TRUE) {
   package_name <- x$package_name[1]
-  package_dependencies <- tools::package_dependencies(package_name, recursive = TRUE)
-  num_dependencies <- length(package_dependencies[[1]])
+  package_dependencies <- tryCatch(
+    tools::package_dependencies(package_name, recursive = TRUE)[[1]],
+    warning = function(w) NULL
+  )
+
+  if (is.null(package_dependencies)) {
+    num_dependencies <- "NA (offline)"
+  } else {
+    num_dependencies <- length(package_dependencies)
+  }
+
 
   num_functions <- nrow(x)
   num_functions_used <- sum(x$function_usage > 0)
@@ -87,7 +96,7 @@ print.package_usage <- function(x, ..., warn_percent_usage = 0.2, warn_number_us
 #'
 #' @rdname package_functions
 getPackageFunctions <- function(package_name) {
-  if (!requireNamespace(package_name)) {
+  if (!requireNamespace(package_name, quietly = TRUE)) {
     stop("Unable to load {", package_name, "}, the package must be installed to check usage.")
   }
 
@@ -96,7 +105,7 @@ getPackageFunctions <- function(package_name) {
 
 #' @rdname package_functions
 getInternalPackageFunctions <- function(package_name) {
-  if (!requireNamespace(package_name)) {
+  if (!requireNamespace(package_name, quietly = TRUE)) {
     stop("Unable to load {", package_name, "}, the package must be installed to check usage.")
   }
 

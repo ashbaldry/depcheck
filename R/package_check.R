@@ -1,7 +1,7 @@
 #' Check Package Dependencies
 #'
 #' @export
-checkPackageDependencies <- function(path = ".", include_suggests = FALSE) {
+checkPackageDependencies <- function(path = ".", include_suggests = FALSE, quiet = FALSE) {
   path <- normalizePath(path, mustWork = TRUE)
   checkIsPackage(path)
 
@@ -35,7 +35,7 @@ checkIsPackage <- function(path) {
 
 findPackageDependencies <- function(description_file, include_suggests = FALSE) {
   description <- read.dcf(description_file)
-  description <- setNames(as.list(description), colnames(description))
+  description <- structure(as.list(description), names = colnames(description))
 
   dependency_names <- c("Depends", "Imports")
   if (include_suggests) dependency_names <- append(dependency_names, "Suggests")
