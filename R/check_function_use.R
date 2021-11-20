@@ -29,8 +29,8 @@ checkFunctionUse <- function(function_name, code, package_name = NULL) {
 
 createFunctionCheckRegEx <- function(function_name, package_name = NULL, internal = FALSE) {
   function_name_regex <- regexEscape(function_name)
-  function_is_word <- grepl("^\\w.*\\w$", function_name)
 
+  function_is_word <- grepl("^\\w.*\\w$", function_name)
   if (function_is_word) {
     function_full_regex <- paste0("\\b", function_name_regex, "\\b")
   } else {
@@ -82,17 +82,32 @@ FUNCTION_ASSIGNMENT_REGEX <- "(?!\\s*<-)"
 
 checkQuotedFunction <- function(code, function_name) {
   quoted_substrings <- extractQuotedSubstrings(code)
-  function_name_regex <- paste0("\\b", regexEscape(function_name), "\\b")
 
-  function_mentions <- lapply(quoted_substrings, grep, pattern = function_name_regex, value = TRUE)
+  function_name_regex <- regexEscape(function_name)
+
+  function_is_word <- grepl("^\\w.*\\w$", function_name)
+  if (function_is_word) {
+    function_full_regex <- paste0("\\b", function_name_regex, "\\b")
+  } else {
+    function_full_regex <- function_name_regex
+  }
+
+  function_mentions <- lapply(quoted_substrings, grep, pattern = function_full_regex, value = TRUE)
   function_mentions <- lapply(function_mentions, setdiff, y = function_name)
+  function_mentions <- lapply(function_mentions, extractSubstrings, regex = function_full_regex)
   lengths(function_mentions)
+}
+
+extractSubstrings <- function(code, regex) {
+  quote_matches <- gregexpr(regex, code, perl = TRUE)
+  substrings <- regmatches(code, quote_matches)
+  unlist(substrings)
 }
 
 extractQuotedSubstrings <- function(code) {
   quote_matches <- gregexpr(QUOTED_SUBSTRING_REGEX, code, perl = TRUE)
-  quoted_substrings <- regmatches(code, quote_matches)
-  lapply(quoted_substrings, gsub, pattern = "^(\"|')|(\"|')$", replacement = "")
+  substrings <- regmatches(code, quote_matches)
+  lapply(substrings, gsub, pattern = "^(\"|')|(\"|')$", replacement = "")
 }
 
 QUOTED_SUBSTRING_REGEX <- "([\"'])(?:\\\\.|(?!\\1).)*+\\1"

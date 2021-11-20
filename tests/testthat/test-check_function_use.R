@@ -148,3 +148,12 @@ testthat::test_that("checkFunctionUse returns 1 for magrittr pipes", {
 
   testthat::expect_identical(function_use, 1)
 })
+
+testthat::test_that("checkFunctionUse returns 0 when function in quotes twice", {
+  function_use <- checkFunctionUse(
+    "and",
+    "test <- function(x) {print('I want x and y and z')}",
+  )
+
+  testthat::expect_identical(function_use, 0)
+})
