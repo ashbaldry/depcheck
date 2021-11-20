@@ -1,21 +1,18 @@
 testthat::test_that("readRFiles fails when file doesn't exist", {
   testthat::expect_error(
-    readRFiles("nonexistent_file"),
-    "The system cannot find the file specified"
+    readRFiles("nonexistent_file")
   )
 })
 
 testthat::test_that("readRFiles fails when directory doesn't exist", {
   testthat::expect_error(
-    readRFiles("nonexistent_file", "nonexistent_directory"),
-    "The system cannot find the path specified"
+    readRFiles("nonexistent_file", "nonexistent_directory")
   )
 })
 
 testthat::test_that("readRFiles fails when file doesn't exist in directory", {
   testthat::expect_error(
-    readRFiles("nonexistent_file", "r_files"),
-    "The system cannot find the file specified"
+    readRFiles("nonexistent_file", "r_files")
   )
 })
 
@@ -36,8 +33,7 @@ testthat::test_that("readRFiles works when specifying file name and directory", 
 
 testthat::test_that("readDirectoryFiles fails when directory doesn't exist", {
   testthat::expect_error(
-    readDirectoryRFiles("nonexistent_directory"),
-    "The system cannot find the file specified"
+    readDirectoryRFiles("nonexistent_directory")
   )
 })
 
@@ -62,8 +58,7 @@ testthat::test_that("readDirectoryFiles returns vector when directory has R file
 
 testthat::test_that("readPackageFiles fails when package doesn't exist", {
   testthat::expect_error(
-    readPackageRFiles("nonexistent_package"),
-    "The system cannot find the file specified"
+    readPackageRFiles("nonexistent_package")
   )
 })
 
