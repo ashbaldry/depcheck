@@ -29,9 +29,10 @@ extractImportPackageCalls <- function(code) {
   unique(sub(PACKAGE_IMPORT_CALL_PREFIX_REGEX, "", packages))
 }
 
-PACKAGE_IMPORT_CALL_PREFIX_REGEX <- "((library|require|requireNamespace)\\(['\"]{0,1})"
+IMPORT_FUNCTIONS <- c("library", "require", "requireNamespace", "loadNamespace")
+PACKAGE_IMPORT_CALL_PREFIX_REGEX <- paste0("((", paste0(IMPORT_FUNCTIONS, collapse = "|"), ")\\(['\"]{0,1})")
 PACKAGE_IMPORT_CALL_REGEX <- paste0(
   PACKAGE_IMPORT_CALL_PREFIX_REGEX,
   .standard_regexps()[["valid_package_name"]],
-  "(?!.+character.only\\s?=\\s?T)"
+  "(?![^'\"].+character.only\\s?=\\s?T)"
 )
