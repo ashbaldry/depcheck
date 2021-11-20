@@ -15,7 +15,16 @@ devtools::install_github("ashbaldry/depcheck")
 
 ## Usage
 
+### Package Check
+
 ```r
 library(depcheck)
 checkPackageDependencies()
+```
+
+### Shiny Application Check
+
+```r
+library(depcheck)
+checkShinyAppDependencies()
 ```

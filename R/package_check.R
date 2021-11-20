@@ -1,7 +1,19 @@
 #' Check Package Dependencies
 #'
+#' @description
+#' This...
+#'
+#' @param path Path to the root package directory
+#' @param include_suggests Logical, should the "Suggests" field also be checked for package dependencies or just
+#' the Depends and Imports?
+#'
+#' @examples
+#' \dontrun{
+#' checkPackageDependencies()
+#' }
+#'
 #' @export
-checkPackageDependencies <- function(path = ".", include_suggests = FALSE, quiet = FALSE) {
+checkPackageDependencies <- function(path = ".", include_suggests = FALSE) {
   path <- normalizePath(path, mustWork = TRUE)
   checkIsPackage(path)
 

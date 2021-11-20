@@ -6,6 +6,18 @@
 \usage{
 checkPackageDependencies(path = ".", include_suggests = FALSE)
 }
+\arguments{
+\item{path}{Path to the root package directory}
+
+\item{include_suggests}{Logical, should the "Suggests" field also be checked for package dependencies or just
+the Depends and Imports?}
+}
 \description{
-Check Package Dependencies
+This...
+}
+\examples{
+\dontrun{
+checkPackageDependencies()
+}
+
 }

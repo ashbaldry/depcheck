@@ -38,6 +38,7 @@ checkDependentPackageUsage <- function(package_name, code) {
 #' @param warn_percent_usage Minimum percent of functions to be used within a dependent package. Default is \code{20\%}
 #' @param warn_number_usage Minimum number of functions to be used within a dependent package. Default is \code{3}
 #' @param include_used_functions Logical, should the functions that are used be included? Default is \code{TRUE}
+#' @param ... Not used
 #'
 #' @details
 #' Package usage must be below both thresholds for the warning to appear. With the defaults, if a package has fewer than
@@ -45,8 +46,8 @@ checkDependentPackageUsage <- function(package_name, code) {
 #'
 #' @method print package_usage
 #' @export
-print.package_usage <- function(x, ..., warn_percent_usage = 0.2, warn_number_usage = 3,
-                                include_used_functions = TRUE) {
+print.package_usage <- function(x, warn_percent_usage = 0.2, warn_number_usage = 3,
+                                include_used_functions = TRUE, ...) {
   package_name <- x$package_name[1]
   package_dependencies <- tryCatch(
     tools::package_dependencies(package_name, recursive = TRUE)[[1]],

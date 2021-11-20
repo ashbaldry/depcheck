@@ -6,10 +6,10 @@
 \usage{
 \method{print}{package_usage}(
   x,
-  ...,
   warn_percent_usage = 0.2,
   warn_number_usage = 3,
-  include_used_functions = TRUE
+  include_used_functions = TRUE,
+  ...
 )
 }
 \arguments{
@@ -20,6 +20,8 @@
 \item{warn_number_usage}{Minimum number of functions to be used within a dependent package. Default is \code{3}}
 
 \item{include_used_functions}{Logical, should the functions that are used be included? Default is \code{TRUE}}
+
+\item{...}{Not used}
 }
 \description{
 Package Usage Printing Options
