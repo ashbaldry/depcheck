@@ -139,3 +139,12 @@ testthat::test_that("checkFunctionUse returns 1 on function is a string", {
 
   testthat::expect_identical(function_use, 1)
 })
+
+testthat::test_that("checkFunctionUse returns 1 for magrittr pipes", {
+  function_use <- checkFunctionUse(
+    "%>%",
+    "test <- function(x) {iris %>% mutate(Species2 = 3)}",
+  )
+
+  testthat::expect_identical(function_use, 1)
+})

@@ -29,9 +29,15 @@ checkFunctionUse <- function(function_name, code, package_name = NULL) {
 
 createFunctionCheckRegEx <- function(function_name, package_name = NULL, internal = FALSE) {
   function_name_regex <- regexEscape(function_name)
+  function_is_word <- grepl("^\\w.*\\w$", function_name)
 
-  function_word <- paste0("\\b", function_name_regex, "\\b")
-  function_word <- addRegexAssignmentCheck(function_word)
+  if (function_is_word) {
+    function_full_regex <- paste0("\\b", function_name_regex, "\\b")
+  } else {
+    function_full_regex <- function_name_regex
+  }
+
+  function_full_regex <- addRegexAssignmentCheck(function_full_regex)
 
   if (!is.null(package_name)) {
     package_name_regex <- regexEscape(package_name)
@@ -41,20 +47,20 @@ createFunctionCheckRegEx <- function(function_name, package_name = NULL, interna
     } else {
       operator <- "::"
     }
-    function_word <- paste0(
-      "[^:]", function_word, "|",
+    function_full_regex <- paste0(
+      "[^:]", function_full_regex, "|",
       "\\b", package_name_regex, operator, function_name_regex, "\\b"
     )
   }
 
-  function_word
+  function_full_regex
 }
 
 regexEscape <- function(x) {
   gsub(paste0("(", paste0("\\", REGEX_SPECIAL_CHARACTERS, collapse = "|"), ")"), "\\\\\\1", x)
 }
 
-REGEX_SPECIAL_CHARACTERS <- c("[", "]", "{", "}", "(", ")", "\\", "^", "$", ".", "|", "?", "*", "+")
+REGEX_SPECIAL_CHARACTERS <- c("[", "]", "{", "}", "(", ")", "\\", "^", "$", ".", "|", "?", "*", "+", "%")
 
 addRegexAssignmentCheck <- function(x) {
   paste0(
