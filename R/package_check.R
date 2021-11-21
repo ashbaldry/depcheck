@@ -27,12 +27,12 @@ checkPackageDependencies <- function(path = ".", include_suggests = FALSE) {
 
   code <- readPackageRFiles(path)
 
-  lapply(dependencies, checkDependentPackageUsage, code = code)
-
-  # TODO: Write results
+  checkPackagesUse(dependencies, code)
 }
 
 checkIsPackage <- function(path) {
+  path <- normalizePath(path, mustWork = TRUE)
+
   project_files <- list.files(path)
   if (!"DESCRIPTION" %in% project_files) {
     stop("DESCRIPTION file not accessible in ", path, ". Unable to check dependencies")
