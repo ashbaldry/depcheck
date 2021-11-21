@@ -4,22 +4,14 @@
 \alias{print.package_usage}
 \title{Package Usage Printing Options}
 \usage{
-\method{print}{package_usage}(
-  x,
-  warn_percent_usage = 0.2,
-  warn_number_usage = 3,
-  include_used_functions = TRUE,
-  ...
-)
+\method{print}{package_usage}(x, warn_percent_usage = 0.2, warn_number_usage = 3, ...)
 }
 \arguments{
-\item{x}{A \code{function_usage} data.frame}
+\item{x}{A \code{package_usage} data.frame}
 
 \item{warn_percent_usage}{Minimum percent of functions to be used within a dependent package. Default is \code{20\%}}
 
 \item{warn_number_usage}{Minimum number of functions to be used within a dependent package. Default is \code{3}}
-
-\item{include_used_functions}{Logical, should the functions that are used be included? Default is \code{TRUE}}
 
 \item{...}{Not used}
 }

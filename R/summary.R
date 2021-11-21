@@ -1,6 +1,6 @@
 #' Function Usage Summary
 #'
-#' @param object A \code{function_usage} data.frame
+#' @param object A \code{package_usage} data.frame
 #' @param warn_percent_usage Minimum percent of functions to be used within a dependent package. Default is \code{20\%}
 #' @param warn_number_usage Minimum number of functions to be used within a dependent package. Default is \code{3}
 #' @param ... Not used
@@ -16,71 +16,120 @@
 #' summary(dependency_use)
 #' }
 #'
-#' @method summary function_usage
+#' @method summary package_usage
 #' @export
-summary.function_usage <- function(object, warn_percent_usage = 0.2, warn_number_usage = 3, ...) {
+summary.package_usage <- function(object, warn_percent_usage = 0.2, warn_number_usage = 3, ...) {
   package_name <- object$package_name[1]
-  package_dependencies <- tryCatch(
-    tools::package_dependencies(package_name, recursive = TRUE)[[1]],
-    warning = function(w) NULL
+  n_dependencies <- countDependentPackages(package_name)
+  function_usage <- summarisePackageUsage(
+    object,
+    warn_percent_usage = warn_percent_usage,
+    warn_number_usage = warn_number_usage
   )
-
-  if (is.null(package_dependencies)) {
-    num_dependencies <- "NA (offline)"
-  } else {
-    num_dependencies <- length(package_dependencies)
-  }
-
-
-  num_functions <- nrow(object)
-  num_functions_used <- sum(object$function_usage > 0)
-  perc_functions_used <- num_functions_used / num_functions
-
-  warn_flag <- perc_functions_used <= warn_percent_usage && num_functions_used < warn_number_usage
-
-  functions_used <- object[object$function_usage > 0, "function_name"]
 
   cat(
     "Package: '", package_name, "'\n",
     "Package Dependencies: ", num_dependencies, "\n",
-    "Package Usage: ", num_functions_used, " / ", num_functions, " (", round(perc_functions_used * 100), "%)\n",
-    "Functions Used: ", paste(functions_used, collapse = ", "), "\n",
+    "Package Usage: ", function_usage$n_functions_used, " / ", function_usage$n_functions,
+    " (", round(function_usage$perc_functions_used * 100), "%)\n",
+    "Functions Used: ", paste(function_usage$functions_used, collapse = ", "), "\n",
     sep = ""
   )
 
-  if (warn_flag) {
+  if (isTRUE(function_usage$warn_flag)) {
     message(
       "Function usage for '", package_name, "' is below the specified thresholds. ",
       "Consider copying used function(s) to reduce dependencies"
     )
   }
 
-  object
+  list(
+    name = package_name,
+    n_dependencies = n_dependencies,
+    perc_functions_used = function_usage$perc_functions_used,
+    functions_used = function_usage$functions_used
+  )
 }
 
 #' Package Usage Summary
 #'
-#' @param object A \code{function_usage} data.frame
+#' @param object A \code{package_usage} data.frame
 #' @param warn_percent_usage Minimum percent of functions to be used within a dependent package. Default is \code{20\%}
 #' @param warn_number_usage Minimum number of functions to be used within a dependent package. Default is \code{3}
 #' @param include_used_functions Logical, should the functions that are used be included? Default is \code{TRUE}
+#' @param ignore_low_usage_packages A vector of packages to ignore the low usage of, usually when already aware of the
+#' low usage, but the dependent package is necessary for the project.
 #' @param ... Not used
 #'
 #' @details
 #' Package usage must be below both thresholds for the warning to appear. With the defaults, if a package has fewer than
 #' 5 functions then only 1 function is required to prevent a warning message to appear.
 #'
-#' @method print package_usage
+#' @method summary multi_package_usage
 #' @export
-summary.package_usage <- function(object, warn_percent_usage = 0.2, warn_number_usage = 3,
-                                  include_used_functions = TRUE, ...) {
-  lapply(
+summary.multi_package_usage <- function(object, warn_percent_usage = 0.2, warn_number_usage = 3,
+                                        include_used_functions = TRUE,
+                                        ignore_low_usage_packages = character(), ...) {
+  packages_summary <- lapply(
     object,
-    print,
+    summarisePackageUsage,
     warn_percent_usage = warn_percent_usage,
-    warn_number_usage = warn_number_usage,
-    include_used_functions = include_used_functions
+    warn_number_usage = warn_number_usage
   )
 
-  object
+  packages <- names(object)
+  low_used_packages <- packages[vapply(packages_summary, function(x) x$warn_flag, logical(1))]
+  low_used_packages <- setdiff(low_used_packages, ignore_low_usage_packages)
+
+  n_dependencies <- countDependentPackages(packages)
+
+  cat(
+    "Number of Declared Packages: ", length(object), "\n",
+    "Total Number of Dependencies: ", n_dependencies, "\n",
+    "Declared Packages:", paste0("'", packages, "'", collapse = ", "), "\n",
+    sep = ""
+  )
+
+  if (length(low_used_packages) > 0) {
+    message(
+      "Function usage for '", paste(low_used_packages, collapse = "\", \""), "' is below the specified thresholds. ",
+      "Print individual package summaries to check if packages can be removed"
+    )
+  }
 }
+
+summarisePackageUsage <- function(package_use, warn_percent_usage = 0.2, warn_number_usage = 3) {
+  package_name <- package_use$package_name[1]
+  n_functions <- nrow(package_use)
+  n_functions_used <- sum(package_use$function_usage > 0)
+  perc_functions_used <- n_functions_used / n_functions
+
+  warn_flag <- perc_functions_used <= warn_percent_usage &&
+    n_functions_used < warn_number_usage &&
+    !package_name %in% BASE_PACKAGES
+
+  list(
+    n_functions = n_functions,
+    n_functions_used = n_functions_used,
+    perc_functions_used = perc_functions_used,
+    functions_used = package_use[package_use$function_usage > 0, "function_name"],
+    warn_flag = warn_flag
+  )
+}
+
+countDependentPackages <- function(packages) {
+  package_dependencies <- tryCatch(
+    tools::package_dependencies(packages, recursive = TRUE),
+    warning = function(w) NULL
+  )
+
+  if (is.null(package_dependencies)) {
+    "NA (offline)"
+  } else {
+    package_dependencies <- unique(unlist(package_dependencies))
+    package_dependencies <- setdiff(package_dependencies, BASE_PACKAGES)
+    length(package_dependencies)
+  }
+}
+
+BASE_PACKAGES <- rownames(installed.packages(priority = "base"))

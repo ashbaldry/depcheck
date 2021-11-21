@@ -2,31 +2,31 @@
 % Please edit documentation in R/summary.R
 \name{summary.package_usage}
 \alias{summary.package_usage}
-\title{Package Usage Summary}
+\title{Function Usage Summary}
 \usage{
-\method{print}{package_usage}(
-  object,
-  warn_percent_usage = 0.2,
-  warn_number_usage = 3,
-  include_used_functions = TRUE,
-  ...
-)
+\method{summary}{package_usage}(object, warn_percent_usage = 0.2, warn_number_usage = 3, ...)
 }
 \arguments{
-\item{object}{A \code{function_usage} data.frame}
+\item{object}{A \code{package_usage} data.frame}
 
 \item{warn_percent_usage}{Minimum percent of functions to be used within a dependent package. Default is \code{20\%}}
 
 \item{warn_number_usage}{Minimum number of functions to be used within a dependent package. Default is \code{3}}
 
-\item{include_used_functions}{Logical, should the functions that are used be included? Default is \code{TRUE}}
-
 \item{...}{Not used}
 }
 \description{
-Package Usage Summary
+Function Usage Summary
 }
 \details{
-Package usage must be below both thresholds for the warning to appear. With the defaults, if a package has fewer than
-5 functions then only 1 function is required to prevent a warning message to appear.
+Function usage must be below both thresholds for the warning to appear. With the defaults,
+if a package has fewer than 5 functions then only 1 function is required to prevent a warning message to appear.
+}
+\examples{
+\dontrun{
+package_use <- checkPackageUse()
+dependency_use <- checkPackageDependencies()
+summary(dependency_use)
+}
+
 }

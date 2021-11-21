@@ -15,10 +15,10 @@ checkPackageUse(package_name, code)
 \item{code}{A character vector of code chunks to check for package use}
 }
 \value{
-\code{checkPackageUse} will return a data.frame of class \code{function_usage}. When printed it will show
+\code{checkPackageUse} will return a data.frame of class \code{package_usage}. When printed it will show
 a summary of the package usage.
 
-\code{checkPackagesUse} will return a list of class \code{package_usage}. When printed it will show
+\code{checkPackagesUse} will return a list of class \code{multi_package_usage}. When printed it will show
 a summary of all packages mentioned, and flag any rarely used.
 }
 \description{

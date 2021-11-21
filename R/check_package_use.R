@@ -7,10 +7,10 @@
 #' @param code A character vector of code chunks to check for package use
 #'
 #' @return
-#' \code{checkPackageUse} will return a data.frame of class \code{function_usage}. When printed it will show
+#' \code{checkPackageUse} will return a data.frame of class \code{package_usage}. When printed it will show
 #' a summary of the package usage.
 #'
-#' \code{checkPackagesUse} will return a list of class \code{package_usage}. When printed it will show
+#' \code{checkPackagesUse} will return a list of class \code{multi_package_usage}. When printed it will show
 #' a summary of all packages mentioned, and flag any rarely used.
 #'
 #' @rdname checkPackageUse
@@ -19,7 +19,7 @@ checkPackagesUse <- function(package_name, code) {
   structure(
     lapply(package_name, checkPackageUse, code = code),
     names = package_name,
-    class = c("package_usage", "list")
+    class = c("multi_package_usage", "list")
   )
 }
 
@@ -43,7 +43,7 @@ checkPackageUse <- function(package_name, code) {
       function_name = functions,
       function_usage = function_usage
     ),
-    class = c("function_usage", "data.frame")
+    class = c("package_usage", "data.frame")
   )
 }
 
