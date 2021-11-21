@@ -91,8 +91,17 @@ summary.multi_package_usage <- function(object, warn_percent_usage = 0.2, warn_n
   )
 
   if (length(low_used_packages) > 0) {
+    if (length(low_used_packages) == 1) {
+      is_verb <- "is"
+      low_packages_pasted <- low_used_packages
+    } else {
+      is_verb <- "are"
+      low_packages_pasted <- sub("(.*), ", "\\1 and ", paste(low_used_packages, collapse = "\", \""))
+    }
+
+
     message(
-      "Function usage for '", paste(low_used_packages, collapse = "\", \""), "' is below the specified thresholds. ",
+      "Function usage for '", low_packages_pasted, "' ", is_verb, " below the specified thresholds. ",
       "Print individual package summaries to check if packages can be removed"
     )
   }
