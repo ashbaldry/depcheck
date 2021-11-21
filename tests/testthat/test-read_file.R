@@ -1,19 +1,17 @@
 testthat::test_that("readRFiles fails when file doesn't exist", {
-  testthat::expect_error(
-    readRFiles("nonexistent_file")
-  )
+  testthat::expect_error(readRFiles("nonexistent_file"))
 })
 
 testthat::test_that("readRFiles fails when directory doesn't exist", {
-  testthat::expect_error(
-    readRFiles("nonexistent_file", "nonexistent_directory")
-  )
+  testthat::expect_error(readRFiles("nonexistent_file", "nonexistent_directory"))
 })
 
 testthat::test_that("readRFiles fails when file doesn't exist in directory", {
-  testthat::expect_error(
-    readRFiles("nonexistent_file", "r_files")
-  )
+  testthat::expect_error(readRFiles("nonexistent_file", "r_files"))
+})
+
+testthat::test_that("readRFiles fails when file isn't an R extension", {
+  testthat::expect_error(readRFiles("DESCRIPTION", "package"))
 })
 
 testthat::test_that("readRFiles works when specifying full file path", {
@@ -32,16 +30,11 @@ testthat::test_that("readRFiles works when specifying file name and directory", 
 })
 
 testthat::test_that("readDirectoryFiles fails when directory doesn't exist", {
-  testthat::expect_error(
-    readDirectoryRFiles("nonexistent_directory")
-  )
+  testthat::expect_error(readDirectoryRFiles("nonexistent_directory"))
 })
 
 testthat::test_that("readDirectoryFiles returns empty vector when directory has no R files", {
-  testthat::expect_warning(
-    readDirectoryRFiles("package"),
-    "No R files found in"
-  )
+  testthat::expect_warning(readDirectoryRFiles("package"), "No R files found in")
 
   chunks <- suppressWarnings(readDirectoryRFiles("package"))
   testthat::expect_length(chunks, 0)
@@ -57,9 +50,7 @@ testthat::test_that("readDirectoryFiles returns vector when directory has R file
 })
 
 testthat::test_that("readPackageFiles fails when package doesn't exist", {
-  testthat::expect_error(
-    readPackageRFiles("nonexistent_package")
-  )
+  testthat::expect_error(readPackageRFiles("nonexistent_package"))
 })
 
 testthat::test_that("readPackageFiles passes when package doesn't exist", {
