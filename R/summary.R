@@ -96,6 +96,8 @@ summary.multi_package_usage <- function(object, warn_percent_usage = 0.2, warn_n
       "Print individual package summaries to check if packages can be removed"
     )
   }
+
+  packages_summary
 }
 
 summarisePackageUsage <- function(package_use, warn_percent_usage = 0.2, warn_number_usage = 3) {
