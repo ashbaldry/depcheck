@@ -22,9 +22,7 @@ checkShinyDependencies <- function(path = ".", r_scripts_dir = "R") {
   code <- readRFiles(files)
   dependencies <- extractPackageCalls(code)
 
-  lapply(dependencies, checkDependentPackageUsage, code = code)
-
-  # TODO: Write results
+  checkPackagesUse(dependencies, code)
 }
 
 checkIsShinyApp <- function(path) {
