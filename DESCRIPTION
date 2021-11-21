@@ -8,7 +8,6 @@ Description: A way to check R packages and shiny applications for unused package
 License: MIT + file LICENSE
 Imports: formatR
 Encoding: UTF-8
-LazyData: true
 Language: en-GB
 Suggests: covr, testthat (>= 3.0.0)
 Config/testthat/edition: 3
