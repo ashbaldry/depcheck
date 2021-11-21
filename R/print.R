@@ -46,6 +46,7 @@ print.multi_package_usage <- function(x, warn_percent_usage = 0.2, warn_number_u
     warn_percent_usage = warn_percent_usage,
     warn_number_usage = warn_number_usage,
     include_used_functions = include_used_functions,
+    ignore_low_usage_packages = ignore_low_usage_packages,
     ...
   )
 
