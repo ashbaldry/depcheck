@@ -86,7 +86,7 @@ summary.multi_package_usage <- function(object, warn_percent_usage = 0.2, warn_n
   cat(
     "Number of Declared Packages: ", length(object), "\n",
     "Total Number of Dependencies: ", n_dependencies, "\n",
-    "Declared Packages:", paste0("'", packages, "'", collapse = ", "), "\n",
+    "Declared Packages: ", paste0("'", packages, "'", collapse = ", "), "\n",
     sep = ""
   )
 
@@ -128,7 +128,7 @@ countDependentPackages <- function(packages) {
   if (is.null(package_dependencies)) {
     "NA (offline)"
   } else {
-    package_dependencies <- unique(unlist(package_dependencies))
+    package_dependencies <- unique(c(packages, unlist(package_dependencies)))
     package_dependencies <- setdiff(package_dependencies, BASE_PACKAGES)
     length(package_dependencies)
   }
