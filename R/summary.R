@@ -27,9 +27,16 @@ summary.package_usage <- function(object, warn_percent_usage = 0.2, warn_number_
     warn_number_usage = warn_number_usage
   )
 
+  package_summary <- list(
+    name = package_name,
+    n_dependencies = n_dependencies,
+    perc_functions_used = function_usage$perc_functions_used,
+    functions_used = function_usage$functions_used
+  )
+
   cat(
     "Package: '", package_name, "'\n",
-    "Package Dependencies: ", num_dependencies, "\n",
+    "Package Dependencies: ", n_dependencies, "\n",
     "Package Usage: ", function_usage$n_functions_used, " / ", function_usage$n_functions,
     " (", round(function_usage$perc_functions_used * 100), "%)\n",
     "Functions Used: ", paste(function_usage$functions_used, collapse = ", "), "\n",
@@ -37,18 +44,19 @@ summary.package_usage <- function(object, warn_percent_usage = 0.2, warn_number_
   )
 
   if (isTRUE(function_usage$warn_flag)) {
+    if (function_usage$n_functions_used) {
+      plural <- ""
+    } else {
+      plural <- "s"
+    }
+
     message(
       "Function usage for '", package_name, "' is below the specified thresholds. ",
-      "Consider copying used function(s) to reduce dependencies"
+      "Consider copying used function", plural, " to reduce dependencies"
     )
   }
 
-  list(
-    name = package_name,
-    n_dependencies = n_dependencies,
-    perc_functions_used = function_usage$perc_functions_used,
-    functions_used = function_usage$functions_used
-  )
+  invisible(package_summary)
 }
 
 #' Package Usage Summary
@@ -56,7 +64,6 @@ summary.package_usage <- function(object, warn_percent_usage = 0.2, warn_number_
 #' @param object A \code{package_usage} data.frame
 #' @param warn_percent_usage Minimum percent of functions to be used within a dependent package. Default is \code{20\%}
 #' @param warn_number_usage Minimum number of functions to be used within a dependent package. Default is \code{3}
-#' @param include_used_functions Logical, should the functions that are used be included? Default is \code{TRUE}
 #' @param ignore_low_usage_packages A vector of packages to ignore the low usage of, usually when already aware of the
 #' low usage, but the dependent package is necessary for the project.
 #' @param ... Not used
@@ -68,7 +75,6 @@ summary.package_usage <- function(object, warn_percent_usage = 0.2, warn_number_
 #' @method summary multi_package_usage
 #' @export
 summary.multi_package_usage <- function(object, warn_percent_usage = 0.2, warn_number_usage = 3,
-                                        include_used_functions = TRUE,
                                         ignore_low_usage_packages = character(), ...) {
   packages_summary <- lapply(
     object,
@@ -86,7 +92,7 @@ summary.multi_package_usage <- function(object, warn_percent_usage = 0.2, warn_n
   cat(
     "Number of Declared Packages: ", length(object), "\n",
     "Total Number of Dependencies: ", n_dependencies, "\n",
-    "Declared Packages: ", paste0("'", packages, "'", collapse = ", "), "\n",
+    "Declared Packages: ", paste0(packages, collapse = ", "), "\n",
     sep = ""
   )
 
@@ -96,17 +102,16 @@ summary.multi_package_usage <- function(object, warn_percent_usage = 0.2, warn_n
       low_packages_pasted <- low_used_packages
     } else {
       is_verb <- "are"
-      low_packages_pasted <- sub("(.*), ", "\\1 and ", paste(low_used_packages, collapse = "\", \""))
+      low_packages_pasted <- sub("(.*), ", "\\1 and ", paste0("'", low_used_packages, "'", collapse = ", "))
     }
 
-
     message(
-      "Function usage for '", low_packages_pasted, "' ", is_verb, " below the specified thresholds. ",
+      "Function usage for ", low_packages_pasted, " ", is_verb, " below the specified thresholds. ",
       "Print individual package summaries to check if packages can be removed"
     )
   }
 
-  packages_summary
+  invisible(packages_summary)
 }
 
 summarisePackageUsage <- function(package_use, warn_percent_usage = 0.2, warn_number_usage = 3) {

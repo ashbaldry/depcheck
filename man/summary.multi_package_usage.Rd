@@ -8,7 +8,6 @@
   object,
   warn_percent_usage = 0.2,
   warn_number_usage = 3,
-  include_used_functions = TRUE,
   ignore_low_usage_packages = character(),
   ...
 )
@@ -19,8 +18,6 @@
 \item{warn_percent_usage}{Minimum percent of functions to be used within a dependent package. Default is \code{20\%}}
 
 \item{warn_number_usage}{Minimum number of functions to be used within a dependent package. Default is \code{3}}
-
-\item{include_used_functions}{Logical, should the functions that are used be included? Default is \code{TRUE}}
 
 \item{ignore_low_usage_packages}{A vector of packages to ignore the low usage of, usually when already aware of the
 low usage, but the dependent package is necessary for the project.}

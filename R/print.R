@@ -27,7 +27,6 @@ print.package_usage <- function(x, warn_percent_usage = 0.2, warn_number_usage =
 #' @param x A \code{package_usage} data.frame
 #' @param warn_percent_usage Minimum percent of functions to be used within a dependent package. Default is \code{20\%}
 #' @param warn_number_usage Minimum number of functions to be used within a dependent package. Default is \code{3}
-#' @param include_used_functions Logical, should the functions that are used be included? Default is \code{TRUE}
 #' @param ignore_low_usage_packages A vector of packages to ignore the low usage of, usually when already aware of the
 #' low usage, but the dependent package is necessary for the project.
 #' @param ... Not used
@@ -39,13 +38,11 @@ print.package_usage <- function(x, warn_percent_usage = 0.2, warn_number_usage =
 #' @method print multi_package_usage
 #' @export
 print.multi_package_usage <- function(x, warn_percent_usage = 0.2, warn_number_usage = 3,
-                                include_used_functions = TRUE,
                                 ignore_low_usage_packages = character(), ...) {
   summary(
     x,
     warn_percent_usage = warn_percent_usage,
     warn_number_usage = warn_number_usage,
-    include_used_functions = include_used_functions,
     ignore_low_usage_packages = ignore_low_usage_packages,
     ...
   )
