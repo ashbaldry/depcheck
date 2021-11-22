@@ -10,8 +10,6 @@ The goal of `{depcheck}` is to provide an overview of the R packages used within
 
 ## Installation
 
-Currently `{depcheck}` is not available on CRAN.
-
 ```r
 devtools::install_github("ashbaldry/depcheck")
 ```
