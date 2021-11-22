@@ -6,9 +6,11 @@
 [![Codecov test coverage](https://codecov.io/gh/ashbaldry/depcheck/branch/main/graph/badge.svg)](https://codecov.io/gh/ashbaldry/depcheck?branch=main)
 <!-- badges: end -->
 
-The aim of `{depcheck}` is to check package dependencies, and flag any packages that are rarely utilised or never called.
+The goal of `{depcheck}` is to provide an overview of the R packages used within a project, finds which functions have been called from the loaded packages, and includes a warning for any package that is seldom/never utilised.
 
 ## Installation
+
+Currently `{depcheck}` is not available on CRAN.
 
 ```r
 devtools::install_github("ashbaldry/depcheck")
@@ -16,16 +18,36 @@ devtools::install_github("ashbaldry/depcheck")
 
 ## Usage
 
-### Package Check
+The 2 main functions in `{depcheck}` are `checkPackageDependencies()` and `checkShinyDependencies()`
+
+- `checkPackageDependencies()` will read the Depends and Imports fields from the `DESCRIPTION` file, and look in the `R` subdirectory for package usage.
+- `checkShinyDependencies()` will check all relevant R files for `library`, `require`, `requireNamespace` and `::` calls to find all packages used, and then run a check on total usage of those packages. 
+
+When printing the results, there are a few options to adjust what is classified as "low usage":
+
+- `warn_percent_usage`, the minimum percentage of functions used before the warning flag is produced
+- `warn_number_usage`, the minimum number of functions used before the warning flag is produced
+- `ignore_low_usage_packages`, if already aware of a package that is rarely used, then it can be included here so it won't be printed as low usage
+
+If a package fails all 3 conditions, then it will be included in the list of under utilised packages.
+
+**NB** Base R packages, such as `{utils}` and `{stats}` will automatically be excluded from the low usage packages 
+
+## Example
 
 ```r
-library(depcheck)
-checkPackageDependencies()
-```
+project_dependencies <- checkShinyDependencies("../reddit-analysis-app") # ashbaldry/reddit-analysis-app
+summary(project_dependencies)
 
-### Shiny Application Check
+Number of Declared Packages: 14
+Total Number of Dependencies: 85
+Declared Packages: utils, glue, httr, highcharter, scales, shiny.semantic, htmlwidgets, stringi, quanteda, R6, data.table, shiny, promises, magrittr
+Function usage for 'glue', 'htmlwidgets', 'stringi', 'magrittr' are below the specified thresholds. Print individual package summaries to check if packages can be removed
 
-```r
-library(depcheck)
-checkShinyDependencies()
+summary(project_dependencies$glue)
+Package: 'glue'
+Package Dependencies: 1
+Package Usage: 1 / 16 (6%)
+Functions Used: glue
+Function usage for 'glue' is below the specified thresholds. Consider copying used function to reduce dependencies
 ```
