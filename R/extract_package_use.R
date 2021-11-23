@@ -5,8 +5,6 @@
 #' referencing through \code{"pkg::function"}
 #'
 #' @param code A character vector of code chunks to check for package calls
-#'
-#' @export
 extractPackageCalls <- function(code) {
   explicit_calls <- extractExplicitPackageCalls(code)
   import_calls <- extractImportPackageCalls(code)

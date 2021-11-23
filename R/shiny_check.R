@@ -3,17 +3,20 @@
 #' @description
 #' This...
 #'
-#' @param path Path to the root application directory
+#' @param path Path to the application root directory
 #' @param r_scripts_dir Subdirectories in the shiny application that contain R scripts, write as relative paths to
 #' \code{path}. Default is set to \code{R}
 #'
 #' @examples
 #' \dontrun{
-#' checkShinyDependencies()
+#' dependency_use <- checkShinyDependencyUse()
+#' summary(dependency_use)
 #' }
 #'
+#' @seealso \code{\link{checkProjectDependencyUse}}, \code{\link{checkPackageDependencyUse}}
+#'
 #' @export
-checkShinyDependencies <- function(path = ".", r_scripts_dir = "R") {
+checkShinyDependencyUse <- function(path = ".", r_scripts_dir = "R") {
   path <- normalizePath(path, mustWork = TRUE)
   checkIsShinyApp(path)
 

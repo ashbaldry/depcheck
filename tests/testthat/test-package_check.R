@@ -20,8 +20,8 @@ testthat::test_that("Suggests dependencies are found correctly when specified", 
   testthat::expect_true("covr" %in% dependencies)
 })
 
-testthat::test_that("checkPackageDependencies works on valid skeleton package", {
-  package_check <- checkPackageDependencies("package")
+testthat::test_that("checkPackageDependencyUse works on valid skeleton package", {
+  package_check <- checkPackageDependencyUse("package")
 
 
 })

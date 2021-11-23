@@ -16,10 +16,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' readPackageFiles()
+#' readPackageRFiles()
 #'
 #' # When running outside of a package
-#' readDirectoryFiles("R")
+#' readDirectoryRFiles("R")
 #' }
 #'
 #' @rdname read_file

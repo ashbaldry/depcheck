@@ -3,17 +3,20 @@
 #' @description
 #' This...
 #'
-#' @param path Path to the root package directory
+#' @param path Path to the package root directory.
 #' @param include_suggests Logical, should the "Suggests" field also be checked for package dependencies or just
 #' the Depends and Imports?
 #'
 #' @examples
 #' \dontrun{
-#' checkPackageDependencies()
+#' dependency_use <- checkPackageDependencyUse()
+#' summary(dependency_use)
 #' }
 #'
+#' @seealso \code{\link{checkProjectDependencyUse}}, \code{\link{checkShinyDependencyUse}}
+#'
 #' @export
-checkPackageDependencies <- function(path = ".", include_suggests = FALSE) {
+checkPackageDependencyUse <- function(path = ".", include_suggests = FALSE) {
   path <- normalizePath(path, mustWork = TRUE)
   checkIsPackage(path)
 

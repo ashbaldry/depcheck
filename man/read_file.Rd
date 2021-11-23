@@ -31,10 +31,10 @@ The default directory for \code{readFiles} is \code{NULL}, to allow the reading 
 }
 \examples{
 \dontrun{
-readPackageFiles()
+readPackageRFiles()
 
 # When running outside of a package
-readDirectoryFiles("R")
+readDirectoryRFiles("R")
 }
 
 }

@@ -1,21 +1,21 @@
-testthat::test_that("createFunctionCheckRegEx returns regex expression", {
-  package_regex <- createFunctionCheckRegEx("function")
+testthat::test_that("createFunctionSearchRegex returns regex expression", {
+  package_regex <- createFunctionSearchRegex("function")
 
   testthat::expect_type(package_regex, "character")
   testthat::expect_length(package_regex, 1)
   testthat::expect_output(print(package_regex), "function")
 })
 
-testthat::test_that("createFunctionCheckRegEx returns regex expression with package", {
-  package_regex <- createFunctionCheckRegEx("function", "package")
+testthat::test_that("createFunctionSearchRegex returns regex expression with package", {
+  package_regex <- createFunctionSearchRegex("function", "package")
 
   testthat::expect_type(package_regex, "character")
   testthat::expect_length(package_regex, 1)
   testthat::expect_output(print(package_regex), "package::function")
 })
 
-testthat::test_that("createFunctionCheckRegEx returns regex expression with package as internal function", {
-  package_regex <- createFunctionCheckRegEx("function", "package", internal = TRUE)
+testthat::test_that("createFunctionSearchRegex returns regex expression with package as internal function", {
+  package_regex <- createFunctionSearchRegex("function", "package", internal = TRUE)
 
   testthat::expect_type(package_regex, "character")
   testthat::expect_length(package_regex, 1)

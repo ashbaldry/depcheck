@@ -9,15 +9,13 @@
 #'
 #' @details If \code{package_name} is left as \code{NULL}, then there is a chance the checks will find times
 #' where the function is used, but is explicitly called from another package.
-#'
-#' @export
 checkFunctionUse <- function(function_name, code, package_name = NULL) {
   if (length(code) == 0) {
     warning("No code to check function usage")
     return(0)
   }
 
-  function_regex <- createFunctionCheckRegEx(function_name, package_name)
+  function_regex <- createFunctionSearchRegex(function_name, package_name)
 
   code_split <- strsplit(code, function_regex, perl = TRUE)
   occurrences <- lengths(code_split) - 1
@@ -27,7 +25,7 @@ checkFunctionUse <- function(function_name, code, package_name = NULL) {
   sum(occurrences - quote_occurrences)
 }
 
-createFunctionCheckRegEx <- function(function_name, package_name = NULL, internal = FALSE) {
+createFunctionSearchRegex <- function(function_name, package_name = NULL, internal = FALSE) {
   function_name_regex <- regexEscape(function_name)
 
   function_is_word <- grepl("^\\w.*\\w$", function_name)

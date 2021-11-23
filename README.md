@@ -18,10 +18,11 @@ devtools::install_github("ashbaldry/depcheck")
 
 ## Usage
 
-The 2 main functions in `{depcheck}` are `checkPackageDependencies()` and `checkShinyDependencies()`
+The 3 main functions in `{depcheck}`:
 
-- `checkPackageDependencies()` will read the Depends and Imports fields from the `DESCRIPTION` file, and look in the `R` subdirectory for package usage.
-- `checkShinyDependencies()` will check all relevant R files for `library`, `require`, `requireNamespace` and `::` calls to find all packages used, and then run a check on total usage of those packages. 
+- `checkPackageDependencyUse()` will read the Depends and Imports fields from the `DESCRIPTION` file, and look in the `R` subdirectory for package usage.
+- `checkShinyDependencyUse()` will check all relevant R files for `library`, `require`, `requireNamespace` and `::` calls to find all packages used, and then run a check on total usage of those packages. 
+- `checkProjectDependencyUse()` is a more generic version of `checkShinyDependencyUse()` and will recursively search all R files in a project directory for packages and their use.
 
 When printing the results, there are a few options to adjust what is classified as "low usage":
 
@@ -36,7 +37,7 @@ If a package fails all 3 conditions, then it will be included in the list of und
 ## Example
 
 ```r
-project_dependencies <- checkShinyDependencies("../reddit-analysis-app") # ashbaldry/reddit-analysis-app
+project_dependencies <- checkShinyDependencyUse("../reddit-analysis-app") # ashbaldry/reddit-analysis-app
 summary(project_dependencies)
 
 Number of Declared Packages: 14
