@@ -10,8 +10,6 @@ The goal of `{depcheck}` is to provide an overview of the R packages used within
 
 ## Installation
 
-Currently `{depcheck}` is not available on CRAN.
-
 ```r
 devtools::install_github("ashbaldry/depcheck")
 ```
@@ -39,16 +37,17 @@ If a package fails all 3 conditions, then it will be included in the list of und
 ```r
 project_dependencies <- checkShinyDependencyUse("../reddit-analysis-app") # ashbaldry/reddit-analysis-app
 summary(project_dependencies)
-
-Number of Declared Packages: 14
-Total Number of Dependencies: 85
-Declared Packages: utils, glue, httr, highcharter, scales, shiny.semantic, htmlwidgets, stringi, quanteda, R6, data.table, shiny, promises, magrittr
-Function usage for 'glue', 'htmlwidgets', 'stringi', 'magrittr' are below the specified thresholds. Print individual package summaries to check if packages can be removed
+# Number of Declared Packages: 14
+# Total Number of Dependencies: 85
+# Declared Packages: utils, glue, httr, highcharter, scales, shiny.semantic, htmlwidgets, stringi, 
+# quanteda, R6, data.table, shiny, promises, magrittr
+# Function usage for 'glue', 'htmlwidgets', 'stringi', 'magrittr' are below the specified thresholds. 
+# Print individual package summaries to check if packages can be removed
 
 summary(project_dependencies$glue)
-Package: 'glue'
-Package Dependencies: 1
-Package Usage: 1 / 16 (6%)
-Functions Used: glue
-Function usage for 'glue' is below the specified thresholds. Consider copying used function to reduce dependencies
+# Package: 'glue'
+# Package Dependencies: 1
+# Package Usage: 1 / 16 (6%)
+# Functions Used: glue
+# Function usage for 'glue' is below the specified thresholds. Consider copying used function to reduce dependencies
 ```
