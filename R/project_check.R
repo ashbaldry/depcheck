@@ -1,10 +1,20 @@
 #' Check Project Package Dependencies
 #'
 #' @description
-#' This...
+#' `checkProjectDependencyUse()` checks R scripts within a project for package calling through the use of
+#' \code{library}, \code{require} and \code{requireNamespace}. It also finds packages explicitly used via
+#' the \code{pkg::function} notation.
+#'
+#' Using these packages, it then checks the same R scripts to check for function use of each package.
 #'
 #' @param path Path to the directories to search for R scripts. By default looks in the current working directory.
 #' @param recursive Logical. Should the R file search recurse into directories?
+#'
+#' @return
+#' An object of class \code{multi_package_usage}, a named list of the dependencies used, each containing a
+#' \code{data.frame} of all the functions within the package and how often they are used within the project.
+#'
+#' The result will flag any packages that have been rarely used in the project.
 #'
 #' @examples
 #' \dontrun{

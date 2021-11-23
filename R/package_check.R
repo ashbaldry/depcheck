@@ -1,11 +1,20 @@
 #' Check Package Dependencies
 #'
 #' @description
-#' This...
+#' `checkPackageDependencyUse()` checks the \code{DESCRIPTION} file for packages mentioned in the \code{Depends}
+#' and \code{Imports} fields.
+#'
+#' Using these packages, it then checks the scripts in the R directory to check for function use of each package.
 #'
 #' @param path Path to the package root directory.
 #' @param include_suggests Logical, should the "Suggests" field also be checked for package dependencies or just
 #' the Depends and Imports?
+#'
+#' @return
+#' An object of class \code{multi_package_usage}, a named list of the dependencies used, each containing a
+#' \code{data.frame} of all the functions within the package and how often they are used within the project.
+#'
+#' The result will flag any packages that have been rarely used in the project.
 #'
 #' @examples
 #' \dontrun{
