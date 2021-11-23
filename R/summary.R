@@ -20,7 +20,7 @@
 #' @export
 summary.package_usage <- function(object, warn_percent_usage = 0.2, warn_number_usage = 3, ...) {
   package_name <- object$package_name[1]
-  n_dependencies <- countDependentPackages(package_name)
+  n_dependencies <- countDependentPackages(package_name, include_self = FALSE)
   function_usage <- summarisePackageUsage(
     object,
     warn_percent_usage = warn_percent_usage,
@@ -133,7 +133,7 @@ summarisePackageUsage <- function(package_use, warn_percent_usage = 0.2, warn_nu
   )
 }
 
-countDependentPackages <- function(packages) {
+countDependentPackages <- function(packages, include_self = TRUE) {
   package_dependencies <- tryCatch(
     tools::package_dependencies(packages, recursive = TRUE),
     warning = function(w) NULL
@@ -142,7 +142,8 @@ countDependentPackages <- function(packages) {
   if (is.null(package_dependencies)) {
     "NA (offline)"
   } else {
-    package_dependencies <- unique(c(packages, unlist(package_dependencies)))
+    package_dependencies <- unlist(package_dependencies)
+    if (include_self) package_dependencies <- unique(c(packages, package_dependencies))
     package_dependencies <- setdiff(package_dependencies, BASE_PACKAGES)
     length(package_dependencies)
   }

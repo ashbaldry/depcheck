@@ -46,7 +46,7 @@ summary(project_dependencies)
 
 summary(project_dependencies$glue)
 # Package: 'glue'
-# Package Dependencies: 1
+# Package Dependencies: 0
 # Package Usage: 1 / 16 (6%)
 # Functions Used: glue
 # Function usage for 'glue' is below the specified thresholds. Consider copying used function to reduce dependencies
