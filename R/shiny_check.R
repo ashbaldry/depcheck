@@ -11,6 +11,7 @@
 #' @param path Path to the application root directory
 #' @param r_scripts_dir Subdirectories in the shiny application that contain R scripts, write as relative paths to
 #' \code{path}. Default is set to \code{R}
+#' @param verbose Logical, should informative messages be printed during the dependency evaluation?
 #'
 #' @examples
 #' \dontrun{
@@ -27,7 +28,7 @@
 #' @seealso \code{\link{checkProjectDependencyUse}}, \code{\link{checkPackageDependencyUse}}
 #'
 #' @export
-checkShinyDependencyUse <- function(path = ".", r_scripts_dir = "R") {
+checkShinyDependencyUse <- function(path = ".", r_scripts_dir = "R", verbose = TRUE) {
   path <- normalizePath(path, mustWork = TRUE)
   checkIsShinyApp(path)
 
@@ -36,7 +37,17 @@ checkShinyDependencyUse <- function(path = ".", r_scripts_dir = "R") {
   code <- readRFiles(files)
   dependencies <- extractPackageCalls(code)
 
-  checkPackagesUsage(dependencies, code)
+  if (length(dependencies) == 0) {
+    cat("No dependency fields found in shiny application\n")
+    return(TRUE)
+  } else if (verbose) {
+    printDependencyList(dependencies)
+  }
+
+  if (verbose) printCheckStart()
+  dependency_usage <- checkPackagesUsage(dependencies, code, verbose)
+  if (verbose) printCheckEnd()
+  dependency_usage
 }
 
 checkIsShinyApp <- function(path) {

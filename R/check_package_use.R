@@ -17,8 +17,14 @@
 #' @rdname checkPackageUsage
 #' @export
 checkPackagesUsage <- function(package_names, code, verbose = TRUE) {
+  packages_usage <- lapply(package_names, function(package_name) {
+    if (verbose) printPackageName(package_name, package_names)
+    checkPackageUsage(package_name, code)
+  })
+  if (verbose) cat("\r")
+
   structure(
-    lapply(package_names, checkPackageUsage, code = code, verbose = verbose),
+    packages_usage,
     names = package_names,
     class = c("multi_package_usage", "list")
   )
@@ -26,8 +32,7 @@ checkPackagesUsage <- function(package_names, code, verbose = TRUE) {
 
 #' @rdname checkPackageUsage
 #' @export
-checkPackageUsage <- function(package_name, code, verbose = FALSE) {
-  if (verbose)
+checkPackageUsage <- function(package_name, code) {
   functions <- getPackageFunctions(package_name)
 
   function_usage <- vapply(
@@ -58,7 +63,7 @@ checkPackageUsage <- function(package_name, code, verbose = FALSE) {
 #'
 #' @rdname package_functions
 getPackageFunctions <- function(package_name) {
-  if (!requireNamespace(package_name, quietly = TRUE)) {
+  if (!suppressPackageStartupMessages(requireNamespace(package_name, quietly = TRUE))) {
     stop("Unable to load {", package_name, "}, the package must be installed to check usage.")
   }
 
@@ -67,7 +72,7 @@ getPackageFunctions <- function(package_name) {
 
 #' @rdname package_functions
 getInternalPackageFunctions <- function(package_name) {
-  if (!requireNamespace(package_name, quietly = TRUE)) {
+  if (!suppressPackageStartupMessages(requireNamespace(package_name, quietly = TRUE))) {
     stop("Unable to load {", package_name, "}, the package must be installed to check usage.")
   }
 

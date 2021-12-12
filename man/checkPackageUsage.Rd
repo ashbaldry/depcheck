@@ -7,7 +7,7 @@
 \usage{
 checkPackagesUsage(package_names, code, verbose = TRUE)
 
-checkPackageUsage(package_name, code, verbose = TRUE)
+checkPackageUsage(package_name, code)
 }
 \arguments{
 \item{package_names, package_name}{Name(s) of the package to check against}

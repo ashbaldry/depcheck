@@ -6,6 +6,10 @@ printCheckStart <- function() {
   cat("Checking dependency usage...\n")
 }
 
-printPackageName <- function(package) {
-  cat("Checking ", package, sep = "")
+printCheckEnd <- function() {
+  cat("Dependency usage checks complete!", rep(" ", 20), "\n")
+}
+
+printPackageName <- function(package, packages) {
+  cat("\rChecking ", package, " (", match(package, packages), " / ", length(packages), ")", rep(" ", 40), sep = "")
 }

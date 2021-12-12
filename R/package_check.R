@@ -43,7 +43,9 @@ checkPackageDependencyUse <- function(path = ".", include_suggests = FALSE, verb
   code <- readPackageRFiles(path)
 
   if (verbose) printCheckStart()
-  checkPackagesUsage(dependencies, code, verbose)
+  dependency_usage <- checkPackagesUsage(dependencies, code, verbose)
+  if (verbose) printCheckEnd()
+  dependency_usage
 }
 
 checkIsPackage <- function(path) {

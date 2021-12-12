@@ -4,12 +4,14 @@
 \alias{checkProjectDependencyUse}
 \title{Check Project Package Dependencies}
 \usage{
-checkProjectDependencyUse(path = ".", recursive = TRUE)
+checkProjectDependencyUse(path = ".", recursive = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{path}{Path to the directories to search for R scripts. By default looks in the current working directory.}
 
 \item{recursive}{Logical. Should the R file search recurse into directories?}
+
+\item{verbose}{Logical, should informative messages be printed during the dependency evaluation?}
 }
 \value{
 An object of class \code{multi_package_usage}, a named list of the dependencies used, each containing a

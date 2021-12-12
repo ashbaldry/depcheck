@@ -4,13 +4,15 @@
 \alias{checkShinyDependencyUse}
 \title{Check Shiny Application Dependencies}
 \usage{
-checkShinyDependencyUse(path = ".", r_scripts_dir = "R")
+checkShinyDependencyUse(path = ".", r_scripts_dir = "R", verbose = TRUE)
 }
 \arguments{
 \item{path}{Path to the application root directory}
 
 \item{r_scripts_dir}{Subdirectories in the shiny application that contain R scripts, write as relative paths to
 \code{path}. Default is set to \code{R}}
+
+\item{verbose}{Logical, should informative messages be printed during the dependency evaluation?}
 }
 \value{
 An object of class \code{multi_package_usage}, a named list of the dependencies used, each containing a
