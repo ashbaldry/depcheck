@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' package_use <- checkPackageUse()
+#' package_use <- checkPackageUsage()
 #' dependency_use <- checkPackageDependencyUse()
 #' summary(dependency_use)
 #' }

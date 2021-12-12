@@ -32,5 +32,5 @@ checkProjectDependencyUse <- function(path = ".", recursive = TRUE) {
   code <- readRFiles(files)
   dependencies <- extractPackageCalls(code)
 
-  checkPackagesUse(dependencies, code)
+  checkPackagesUsage(dependencies, code)
 }

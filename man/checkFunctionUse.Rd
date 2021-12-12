@@ -19,4 +19,11 @@ Counting the frequency that a function is called within selected code.
 \details{
 If \code{package_name} is left as \code{NULL}, then there is a chance the checks will find times
 where the function is used, but is explicitly called from another package.
+
+There are three stages of checking:
+- If the function name exists anywhere in the code chunks
+- If it has not been previously assigned in a code chunk
+- If the function name is not quoted
+
+At each stage, only keep chunks where the function has been called to improve speed
 }

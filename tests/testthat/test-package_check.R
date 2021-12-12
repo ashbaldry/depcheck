@@ -21,7 +21,7 @@ testthat::test_that("Suggests dependencies are found correctly when specified", 
 })
 
 testthat::test_that("checkPackageDependencyUse works on valid skeleton package", {
-  package_check <- checkPackageDependencyUse("package")
+  package_check <- checkPackageDependencyUse("package", verbose = FALSE)
 
-
+  testthat::expect_s3_class(package_check, "multi_package_usage")
 })

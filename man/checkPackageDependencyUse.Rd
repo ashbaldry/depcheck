@@ -4,13 +4,15 @@
 \alias{checkPackageDependencyUse}
 \title{Check Package Dependencies}
 \usage{
-checkPackageDependencyUse(path = ".", include_suggests = FALSE)
+checkPackageDependencyUse(path = ".", include_suggests = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{path}{Path to the package root directory.}
 
 \item{include_suggests}{Logical, should the "Suggests" field also be checked for package dependencies or just
 the Depends and Imports?}
+
+\item{verbose}{Logical, should informative messages be printed during the dependency evaluation?}
 }
 \value{
 An object of class \code{multi_package_usage}, a named list of the dependencies used, each containing a

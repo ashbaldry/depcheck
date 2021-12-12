@@ -9,6 +9,7 @@
 #' @param path Path to the package root directory.
 #' @param include_suggests Logical, should the "Suggests" field also be checked for package dependencies or just
 #' the Depends and Imports?
+#' @param verbose Logical, should informative messages be printed during the dependency evaluation?
 #'
 #' @return
 #' An object of class \code{multi_package_usage}, a named list of the dependencies used, each containing a
@@ -25,7 +26,7 @@
 #' @seealso \code{\link{checkProjectDependencyUse}}, \code{\link{checkShinyDependencyUse}}
 #'
 #' @export
-checkPackageDependencyUse <- function(path = ".", include_suggests = FALSE) {
+checkPackageDependencyUse <- function(path = ".", include_suggests = FALSE, verbose = TRUE) {
   path <- normalizePath(path, mustWork = TRUE)
   checkIsPackage(path)
 
@@ -35,11 +36,14 @@ checkPackageDependencyUse <- function(path = ".", include_suggests = FALSE) {
   if (length(dependencies) == 0) {
     cat("No dependency fields found in DESCRIPTION file\n")
     return(TRUE)
+  } else if (verbose) {
+    printDependencyList(dependencies)
   }
 
   code <- readPackageRFiles(path)
 
-  checkPackagesUse(dependencies, code)
+  if (verbose) printCheckStart()
+  checkPackagesUsage(dependencies, code, verbose)
 }
 
 checkIsPackage <- function(path) {

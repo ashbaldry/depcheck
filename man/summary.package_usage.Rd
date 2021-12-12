@@ -24,7 +24,7 @@ if a package has fewer than 5 functions then only 1 function is required to prev
 }
 \examples{
 \dontrun{
-package_use <- checkPackageUse()
+package_use <- checkPackageUsage()
 dependency_use <- checkPackageDependencyUse()
 summary(dependency_use)
 }

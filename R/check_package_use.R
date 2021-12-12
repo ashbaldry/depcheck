@@ -3,29 +3,31 @@
 #' @description
 #' This will check what functions contained within a specified package are used in code.
 #'
-#' @param package_name Name(s) of the package to check against
+#' @param package_names,package_name Name(s) of the package to check against
 #' @param code A character vector of code chunks to check for package use
+#' @param verbose Logical, should informative messages be printed during the dependency evaluation?
 #'
 #' @return
-#' \code{checkPackageUse} will return a data.frame of class \code{package_usage}. When printed it will show
+#' \code{checkPackageUsage} will return a data.frame of class \code{package_usage}. When printed it will show
 #' a summary of the package usage.
 #'
-#' \code{checkPackagesUse} will return a list of class \code{multi_package_usage}. When printed it will show
+#' \code{checkPackagesUsage} will return a list of class \code{multi_package_usage}. When printed it will show
 #' a summary of all packages mentioned, and flag any rarely used.
 #'
-#' @rdname checkPackageUse
+#' @rdname checkPackageUsage
 #' @export
-checkPackagesUse <- function(package_name, code) {
+checkPackagesUsage <- function(package_names, code, verbose = TRUE) {
   structure(
-    lapply(package_name, checkPackageUse, code = code),
-    names = package_name,
+    lapply(package_names, checkPackageUsage, code = code, verbose = verbose),
+    names = package_names,
     class = c("multi_package_usage", "list")
   )
 }
 
-#' @rdname checkPackageUse
+#' @rdname checkPackageUsage
 #' @export
-checkPackageUse <- function(package_name, code) {
+checkPackageUsage <- function(package_name, code, verbose = FALSE) {
+  if (verbose)
   functions <- getPackageFunctions(package_name)
 
   function_usage <- vapply(

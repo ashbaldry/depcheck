@@ -9,18 +9,35 @@
 #'
 #' @details If \code{package_name} is left as \code{NULL}, then there is a chance the checks will find times
 #' where the function is used, but is explicitly called from another package.
+#'
+#' There are three stages of checking:
+#' - If the function name exists anywhere in the code chunks
+#' - If it has not been previously assigned in a code chunk
+#' - If the function name is not quoted
+#'
+#' At each stage, only keep chunks where the function has been called to improve speed
 checkFunctionUse <- function(function_name, code, package_name = NULL) {
   if (length(code) == 0) {
     warning("No code to check function usage")
     return(0)
   }
 
+  function_code <- grep(function_name, code, value = TRUE)
+  if (length(function_code) == 0) return(0)
+
   function_regex <- createFunctionSearchRegex(function_name, package_name)
 
-  code_split <- strsplit(code, function_regex, perl = TRUE)
+  code_split <- strsplit(function_code, function_regex, perl = TRUE)
   occurrences <- lengths(code_split) - 1
 
-  quote_occurrences <- checkQuotedFunction(code, function_name)
+  if (sum(occurrences) == 0) {
+    return(0)
+  } else {
+    function_code <- function_code[occurrences > 0]
+    occurrences <- occurrences[occurrences > 0]
+  }
+
+  quote_occurrences <- checkQuotedFunction(function_code, function_name)
 
   sum(occurrences - quote_occurrences)
 }
@@ -72,7 +89,7 @@ addRegexAssignmentCheck <- function(x) {
 }
 
 addPreviousFunctionAssignmentRegex <- function(x) {
-  paste0("(", x, "\\s*<-.*(*SKIP)(*FAIL)|)")
+  paste0("(", x, "\\s*<-.*(*SKIP)|)")
 }
 
 FUNCTION_ARGUMENT_REGEX <- "(?!\\s*=)"
