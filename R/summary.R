@@ -36,10 +36,12 @@ summary.package_usage <- function(object, warn_percent_usage = 0.2, warn_number_
 
   cat(
     "Package: '", package_name, "'\n",
-    "Package Dependencies: ", n_dependencies, "\n",
-    "Package Usage: ", function_usage$n_functions_used, " / ", function_usage$n_functions,
+    "Number of Dependencies: ", n_dependencies, "\n",
+    "Number of Functions Used: ", function_usage$n_functions_used, " / ", function_usage$n_functions,
     " (", round(function_usage$perc_functions_used * 100), "%)\n",
-    "Functions Used: ", paste(function_usage$functions_used, collapse = ", "), "\n",
+    if (function_usage$n_functions_used > 0) {
+      paste0("Functions Used: ", paste(function_usage$functions_used, collapse = ", "), "\n")
+    },
     sep = ""
   )
 
