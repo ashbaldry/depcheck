@@ -22,7 +22,7 @@ checkFunctionUse <- function(function_name, code, package_name = NULL) {
     return(0)
   }
 
-  function_code <- grep(function_name, code, value = TRUE)
+  function_code <- grep(function_name, code, value = TRUE, fixed = TRUE)
   if (length(function_code) == 0) return(0)
 
   function_regex <- createFunctionSearchRegex(function_name, package_name)
