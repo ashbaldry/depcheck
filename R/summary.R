@@ -86,8 +86,10 @@ summary.multi_package_usage <- function(object, warn_percent_usage = 0.2, warn_n
   )
 
   packages <- names(object)
+  high_used_packages <- packages[vapply(packages_summary, function(x) !x$warn_flag, logical(1))]
+  high_used_dependencies <- findDependentPackages(high_used_packages)
   low_used_packages <- packages[vapply(packages_summary, function(x) x$warn_flag, logical(1))]
-  low_used_packages <- setdiff(low_used_packages, ignore_low_usage_packages)
+  low_used_packages <- setdiff(low_used_packages, c(high_used_dependencies, ignore_low_usage_packages))
 
   n_dependencies <- countDependentPackages(packages)
 
@@ -136,18 +138,27 @@ summarisePackageUsage <- function(package_use, warn_percent_usage = 0.2, warn_nu
 }
 
 countDependentPackages <- function(packages, include_self = TRUE) {
+  package_dependencies <- findDependentPackages(packages, include_self)
+
+  if (is.null(package_dependencies)) {
+    "NA (offline)"
+  } else {
+    length(package_dependencies)
+  }
+}
+
+findDependentPackages <- function(packages, include_self = TRUE) {
   package_dependencies <- tryCatch(
     tools::package_dependencies(packages, recursive = TRUE),
     warning = function(w) NULL
   )
 
   if (is.null(package_dependencies)) {
-    "NA (offline)"
+    package_dependencies
   } else {
     package_dependencies <- unlist(package_dependencies)
     if (include_self) package_dependencies <- unique(c(packages, package_dependencies))
-    package_dependencies <- setdiff(package_dependencies, BASE_PACKAGES)
-    length(package_dependencies)
+    setdiff(package_dependencies, BASE_PACKAGES)
   }
 }
 
