@@ -6,7 +6,7 @@ Authors@R: person("Ashley", "Baldry", email = "arbaldry91@gmail.com", role = c("
 Description: A way to check R packages and shiny applications for unused package dependencies, or packages
     with low usage. Reduces the requirement to have unneccessary dependencies in a project.
 License: MIT + file LICENSE
-Imports: formatR, testthat
+Imports: formatR, testthat, digest
 Encoding: UTF-8
 Language: en-GB
 Suggests: covr
