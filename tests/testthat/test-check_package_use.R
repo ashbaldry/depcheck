@@ -5,6 +5,9 @@ testthat::test_that("getPackageFunctions fails for non-existent package", {
   )
 })
 
+testthat::skip_if_offline("cran.rstudio.com")
+options(repos = "https://cran.rstudio.com/")
+
 testthat::test_that("getPackageFunctions returns character vector of functions in package", {
   functions <- getPackageFunctions("utils")
 
